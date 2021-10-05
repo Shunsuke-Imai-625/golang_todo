@@ -5,3 +5,4 @@
 2021/10/04 17:16:54 main.go:19: sql: no rows in result set
 2021/10/04 17:51:48 route_auth.go:42: sql: no rows in result set
 2021/10/04 17:51:48 server.go:3119: http: superfluous response.WriteHeader call from Golang_udemy/todo_app/app/controllers.authenticate (route_auth.go:59)
+2021/10/05 18:31:16 users.go:41: pq: SSL is not enabled on the server
