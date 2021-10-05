@@ -28,7 +28,6 @@ const (
 func init() {
 
 	url := os.Getenv("DATABASE_URL")
-	url = "postgres://psjgxogklewnxt:0039b9ed7714c7d4edfc4fa45a3a2736c497601087a82a1c5fd6253d39b8369c@ec2-54-204-148-110.compute-1.amazonaws.com:5432/ddt943as20osh3"
 	connection, _ := pq.ParseURL(url)
 	connection += "sslmode=require"
 	Db, err = sql.Open(config.Config.SQLDriver, connection)
