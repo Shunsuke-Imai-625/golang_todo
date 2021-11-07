@@ -22,6 +22,7 @@ type Session struct {
 	CreatedAt time.Time
 }
 
+//ユーザーを作成する
 func (u *User) CreateUser() (err error) {
 	cmd := `INSERT INTO users (
 		uuid,
@@ -43,6 +44,7 @@ func (u *User) CreateUser() (err error) {
 	return err
 }
 
+//ユーザーIDをもとに、DBからユーザーを取得する
 func GetUser(id int) (user User, err error) {
 	user = User{}
 	cmd := `select id, uuid, name, email, password, created_at
@@ -76,6 +78,7 @@ func (u *User) DeleteUser() (err error) {
 	return err
 }
 
+//登録されたEmailからユーザー情報を取得する
 func GetUserByEmail(email string) (user User, err error) {
 	user = User{}
 	cmd := `SELECT id, uuid, name, email, password, created_at
@@ -92,6 +95,7 @@ func GetUserByEmail(email string) (user User, err error) {
 
 }
 
+//セッションを作成して、作成したセッションを返却する
 func (u *User) CreateSession() (session Session, err error) {
 	session = Session{}
 	cmd1 := `INSERT INTO sessions (
@@ -118,6 +122,7 @@ func (u *User) CreateSession() (session Session, err error) {
 	return session, err
 }
 
+//セッションの存在をUUIDでチェックする
 func (sess *Session) CheckSession() (valid bool, err error) {
 	cmd := `SELECT id, uuid, email, user_id, created_at
 	FROM sessions WHERE uuid = $1`
@@ -139,6 +144,7 @@ func (sess *Session) CheckSession() (valid bool, err error) {
 
 }
 
+//UUIDからセッションを削除する
 func (sess *Session) DelsteSessionByUUID() (err error) {
 	cmd := `DELETE FROM sessions WHERE uuid = $1`
 	_, err = Db.Exec(cmd, sess.UUID)
@@ -148,6 +154,7 @@ func (sess *Session) DelsteSessionByUUID() (err error) {
 	return err
 }
 
+//セッションに存在するユーザーIDから対応するユーザーを取得する
 func (sess *Session) GetUserBySession() (user User, err error) {
 	user = User{}
 	cmd := `SELECT id, uuid, name, email, created_at FROM users

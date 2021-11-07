@@ -11,6 +11,7 @@ import (
 	"strconv"
 )
 
+//テンプレートからHTMLを作成する（データもくっつける）
 func generateHTML(w http.ResponseWriter, data interface{}, filenames ...string) {
 	var files []string
 	for _, file := range filenames {
@@ -21,6 +22,7 @@ func generateHTML(w http.ResponseWriter, data interface{}, filenames ...string) 
 
 }
 
+//セッションを作成する
 func session(w http.ResponseWriter, r *http.Request) (sess models.Session, err error) {
 	cookie, err := r.Cookie("_cookie")
 	if err == nil {
@@ -38,11 +40,14 @@ var validPath = regexp.MustCompile("^/todos/(edit|update|delete)/([0-9]+)$")
 func parseURL(fn func(http.ResponseWriter, *http.Request, int)) http.HandlerFunc {
 
 	return func(w http.ResponseWriter, r *http.Request) {
+		//URLの形式が正しいかチェック
 		q := validPath.FindStringSubmatch(r.URL.Path)
+		//URLが空ならエラー
 		if q == nil {
 			http.NotFound(w, r)
 			return
 		}
+		//URLの最後が数字じゃなかったらエラー
 		qi, err := strconv.Atoi(q[2])
 		if err != nil {
 			http.NotFound(w, r)
@@ -52,6 +57,7 @@ func parseURL(fn func(http.ResponseWriter, *http.Request, int)) http.HandlerFunc
 	}
 }
 
+//URLで処理を振り分ける
 func StartMainServer() error {
 	files := http.FileServer(http.Dir(config.Config.Static))
 	http.Handle("/static/", http.StripPrefix("/static/", files))

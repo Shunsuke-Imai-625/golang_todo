@@ -12,6 +12,7 @@ type Todo struct {
 	CreatedAt time.Time
 }
 
+//TODOテーブルに情報を追加
 func (u *User) CreateTodo(content string) (err error) {
 	cmd := `INSERT INTO todos (
 		content,
@@ -25,6 +26,7 @@ func (u *User) CreateTodo(content string) (err error) {
 	return err
 }
 
+//IDから対応するTODOを取得する
 func GetTodo(id int) (todo Todo, err error) {
 	todo = Todo{}
 	cmd := `SELECT id, content, user_id, created_at FROM todos
@@ -87,6 +89,7 @@ func (u *User) GetTodosByUser() (todos []Todo, err error) {
 	return todos, err
 }
 
+//TODOの内容をアップデートする
 func (t *Todo) UpdateTodo() (err error) {
 	cmd := `UPDATE todos SET content = $1, user_id = $2
 	WHERE id = $3`
@@ -98,6 +101,7 @@ func (t *Todo) UpdateTodo() (err error) {
 
 }
 
+//TODOを削除する
 func (t *Todo) DeleteTodo() (err error) {
 	cmd := `DELETE FROM todos WHERE id = $1`
 	_, err = Db.Exec(cmd, t.ID)
